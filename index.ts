@@ -7,10 +7,9 @@ class LoadingSpinner extends HTMLElement {
 
   private _styles = `
     .main {
-		width: 235px;
-		height: 235px;
+		width: 240px;
+		height: 240px;
 		border-radius: 120px;
-		/*border: 15px solid red;*/
 		background-image: linear-gradient(#ff7676, orange);
 		position:relative;
     }
@@ -19,8 +18,8 @@ class LoadingSpinner extends HTMLElement {
 		width: 230px;
 		height: 220px;
 		position: absolute;
-		top: 7px;
-		left: 3px;
+		top: 10px;
+		left: 5px;
 		border-radius: 140px;
 		-webkit-animation-name: spin;
 		-webkit-animation-duration: 1000ms;
@@ -36,7 +35,7 @@ class LoadingSpinner extends HTMLElement {
 		-ms-animation-timing-function: linear;
 		
 		animation-name: spin;
-		animation-duration: 1000ms;
+		animation-duration: 500ms;
 		animation-iteration-count: infinite;
     	animation-timing-function: linear;
     }
@@ -70,6 +69,17 @@ class LoadingSpinner extends HTMLElement {
 			transform:rotate(360deg);
 		}
 	}
+	.content {
+		position: absolute;
+		left: 27%;
+		top: 42%;
+		font: arial;
+		font-size: 23px;
+		font-family: monospace;
+		background: linear-gradient(to right, orange, red);
+		-webkit-background-clip: text;
+  		-webkit-text-fill-color: transparent;
+	}
   `;
 
   private mainDiv: HTMLDivElement;
@@ -86,8 +96,12 @@ class LoadingSpinner extends HTMLElement {
     const div1 = document.createElement("div");
     div1.classList.add("spin1");
     div.appendChild(div1);
+    const content = document.createElement("div");
+    content.classList.add("content");
+    content.textContent = "LOADING..";
     shadow.appendChild(style);
     this.mainDiv.appendChild(div);
+    this.mainDiv.appendChild(content);
     shadow.appendChild(this.mainDiv);
   }
 }
