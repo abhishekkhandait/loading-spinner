@@ -5,11 +5,12 @@ class LoadingSpinner extends HTMLElement {
     return ["active"];
   }
 
+  //#region styles
   private _styles = `
     .main {
 		width: 240px;
 		height: 240px;
-		border-radius: 120px;
+		border-radius: 50%;
 		background-image: linear-gradient(#ff7676, orange);
 		position:relative;
     }
@@ -20,7 +21,7 @@ class LoadingSpinner extends HTMLElement {
 		position: absolute;
 		top: 10px;
 		left: 5px;
-		border-radius: 140px;
+		border-radius: 50%;
 		-webkit-animation-name: spin;
 		-webkit-animation-duration: 1000ms;
 		-webkit-animation-iteration-count: infinite;
@@ -46,7 +47,7 @@ class LoadingSpinner extends HTMLElement {
 		top: 2px;
 		left: 7px;
 		position: absolute;
-		border-radius: 110px;
+		border-radius: 50%;
 		border: 1px solid yellow;
     }
 	@-ms-keyframes spin {
@@ -75,34 +76,40 @@ class LoadingSpinner extends HTMLElement {
 		top: 42%;
 		font: arial;
 		font-size: 23px;
-		font-family: monospace;
+		font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
 		background: linear-gradient(to right, orange, red);
 		-webkit-background-clip: text;
   		-webkit-text-fill-color: transparent;
 	}
   `;
+  //#endregion
 
   private mainDiv: HTMLDivElement;
+  private content: HTMLDivElement;
 
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: "open" });
-    this.mainDiv = document.createElement("div");
-    this.mainDiv.classList.add("main");
     const style = document.createElement("style");
     style.textContent = this._styles;
-    const div = document.createElement("div");
-    div.classList.add("spin");
-    const div1 = document.createElement("div");
-    div1.classList.add("spin1");
-    div.appendChild(div1);
-    const content = document.createElement("div");
-    content.classList.add("content");
-    content.textContent = "LOADING..";
     shadow.appendChild(style);
-    this.mainDiv.appendChild(div);
-    this.mainDiv.appendChild(content);
-    shadow.appendChild(this.mainDiv);
+    shadow.appendChild(this.createSpinner());
+  }
+
+  private createSpinner() {
+    this.mainDiv = document.createElement("div");
+    this.mainDiv.classList.add("main");
+    const spinerdiv = document.createElement("div");
+    spinerdiv.classList.add("spin");
+    const spinerdiv1 = document.createElement("div");
+    spinerdiv1.classList.add("spin1");
+    spinerdiv.appendChild(spinerdiv1);
+    this.content = document.createElement("div");
+    this.content.classList.add("content");
+    this.content.textContent = "LOADING..";
+    this.mainDiv.appendChild(spinerdiv);
+    this.mainDiv.appendChild(this.content);
+    return this.mainDiv;
   }
 }
 
