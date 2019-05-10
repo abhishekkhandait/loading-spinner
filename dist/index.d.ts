@@ -3,6 +3,9 @@ declare class LoadingSpinner extends HTMLElement {
     private _styles;
     private mainDiv;
     private content;
+    private styles;
+    private scale;
     constructor();
+    connectedCallback(): void;
     private createSpinner;
 }

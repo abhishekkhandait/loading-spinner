@@ -6,32 +6,35 @@ class LoadingSpinner extends HTMLElement {
   }
 
   //#region styles
-  private _styles = `
+  private _styles = () => `
     .main {
-		width: 240px;
-		height: 240px;
+		width: 15em;
+		height: 15em;
 		border-radius: 50%;
 		background-image: linear-gradient(#ff7676, orange);
 		position:relative;
+		transform: scale(${this.scale});
     }
     .spin {
 		background: linear-gradient(orange, yellow);
-		width: 230px;
-		height: 220px;
+		width: 14.375em;
+		height: 13.75em;
 		position: absolute;
-		top: 10px;
-		left: 5px;
+		top: 0.625em;
+		left: 0.313em;
 		border-radius: 50%;
+	}
+	.start-spin {
 		-webkit-animation-name: spin;
-		-webkit-animation-duration: 1000ms;
+		-webkit-animation-duration: 500ms;
 		-webkit-animation-iteration-count: infinite;
 		-webkit-animation-timing-function: linear;
 		-moz-animation-name: spin;
-		-moz-animation-duration: 1000ms;
+		-moz-animation-duration: 500ms;
 		-moz-animation-iteration-count: infinite;
 		-moz-animation-timing-function: linear;
 		-ms-animation-name: spin;
-		-ms-animation-duration: 1000ms;
+		-ms-animation-duration: 500ms;
 		-ms-animation-iteration-count: infinite;
 		-ms-animation-timing-function: linear;
 		
@@ -39,16 +42,16 @@ class LoadingSpinner extends HTMLElement {
 		animation-duration: 500ms;
 		animation-iteration-count: infinite;
     	animation-timing-function: linear;
-    }
+	}
     .spin1 {
 		background: white;
-		width: 215px;
-		height: 215px;
-		top: 2px;
-		left: 7px;
+		width: 13.438em;
+		height: 13.438em;
+		top: 0.125em;
+		left: 0.438em;
 		position: absolute;
 		border-radius: 50%;
-		border: 1px solid yellow;
+		border: 0.063em solid yellow;
     }
 	@-ms-keyframes spin {
 		from { -ms-transform: rotate(0deg); }
@@ -75,7 +78,7 @@ class LoadingSpinner extends HTMLElement {
 		left: 27%;
 		top: 42%;
 		font: arial;
-		font-size: 23px;
+		font-size: 1.4em;
 		font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
 		background: linear-gradient(to right, orange, red);
 		-webkit-background-clip: text;
@@ -86,21 +89,53 @@ class LoadingSpinner extends HTMLElement {
 
   private mainDiv: HTMLDivElement;
   private content: HTMLDivElement;
+  private styles;
+  private scale: number;
 
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: "open" });
-    const style = document.createElement("style");
-    style.textContent = this._styles;
-    shadow.appendChild(style);
+    this.styles = document.createElement("style");
+    shadow.appendChild(this.styles);
     shadow.appendChild(this.createSpinner());
+  }
+
+  public connectedCallback() {
+    const size = this.getAttribute("size");
+    if (["xs", "sm", "mid", "lg", "xl", "xxl"].includes(size)) {
+      switch (size) {
+        case "xs":
+          this.scale = 0.25;
+          break;
+        case "sm":
+          this.scale = 0.5;
+          break;
+        case "mid":
+          this.scale = 0.75;
+          break;
+        case "lg":
+          this.scale = 1.0;
+          break;
+        case "xl":
+          this.scale = 1.5;
+          break;
+        case "xxl":
+          this.scale = 2;
+          break;
+      }
+    } else if (size !== null && !isNaN(Number(size))) {
+      this.scale = Number(size);
+    } else {
+      this.scale = 1;
+    }
+    this.styles.textContent = this._styles();
   }
 
   private createSpinner() {
     this.mainDiv = document.createElement("div");
     this.mainDiv.classList.add("main");
     const spinerdiv = document.createElement("div");
-    spinerdiv.classList.add("spin");
+    spinerdiv.classList.add("spin", "start-spin");
     const spinerdiv1 = document.createElement("div");
     spinerdiv1.classList.add("spin1");
     spinerdiv.appendChild(spinerdiv1);
